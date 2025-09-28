@@ -31,6 +31,16 @@ export default function CompliancePage() {
   const [selectedPriority, setSelectedPriority] = useState('all')
   const [loading, setLoading] = useState(true)
 
+  // Safe rendering helper function
+  const renderValue = (value: any): string => {
+    if (typeof value === 'string') return value
+    if (typeof value === 'number') return value.toString()
+    if (typeof value === 'object' && value !== null) {
+      return value.name || value.title || JSON.stringify(value)
+    }
+    return ''
+  }
+
   useEffect(() => {
     fetchTasks()
   }, [])
@@ -38,6 +48,19 @@ export default function CompliancePage() {
   useEffect(() => {
     filterTasks()
   }, [searchTerm, selectedCategory, selectedStatus, selectedPriority, tasks])
+
+  // Debug useEffect to identify any object rendering issues
+  useEffect(() => {
+    console.log('Tasks data:', tasks)
+    tasks.forEach((task, index) => {
+      console.log(`Task ${index}:`, {
+        assignedTo: typeof task.assignedTo,
+        title: typeof task.title,
+        description: typeof task.description,
+        category: typeof task.category
+      })
+    })
+  }, [tasks])
 
   const fetchTasks = async () => {
     try {
@@ -210,11 +233,17 @@ export default function CompliancePage() {
   }
 
   const getDaysUntilDue = (dueDate: string) => {
-    const today = new Date()
-    const due = new Date(dueDate)
-    const diffTime = due.getTime() - today.getTime()
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-    return diffDays
+    if (!dueDate) return 0
+    try {
+      const today = new Date()
+      const due = new Date(dueDate)
+      const diffTime = due.getTime() - today.getTime()
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+      return diffDays
+    } catch (error) {
+      console.error('Error calculating days until due:', error)
+      return 0
+    }
   }
 
   const categories = ['all', 'GST', 'Income Tax', 'Company Law', 'Labor Law', 'State Compliance']
@@ -382,18 +411,18 @@ export default function CompliancePage() {
                         <div className={`w-1 h-16 rounded-full ${getPriorityColor(task.priority)}`} />
                         <div className="flex-1">
                           <div className="flex items-center space-x-2">
-                            <h3 className="font-medium">{task.title}</h3>
+                            <h3 className="font-medium">{renderValue(task.title) || 'Untitled Task'}</h3>
                             {task.recurring && (
                               <span className="bg-blue-100 text-blue-600 text-xs px-2 py-0.5 rounded">
-                                {task.frequency}
+                                {renderValue(task.frequency)}
                               </span>
                             )}
                           </div>
-                          <p className="text-sm text-gray-600 mt-1">{task.description}</p>
+                          <p className="text-sm text-gray-600 mt-1">{renderValue(task.description) || 'No description'}</p>
                           <div className="flex items-center space-x-4 mt-2 text-sm">
                             <span className="flex items-center space-x-1">
                               <Calendar className="w-4 h-4 text-gray-400" />
-                              <span>Due: {new Date(task.dueDate).toLocaleDateString()}</span>
+                              <span>Due: {task.dueDate ? new Date(task.dueDate).toLocaleDateString() : 'No date'}</span>
                               {daysUntilDue >= 0 ? (
                                 <span className="text-xs text-gray-500">({daysUntilDue} days)</span>
                               ) : (
@@ -402,10 +431,10 @@ export default function CompliancePage() {
                             </span>
                             <span className="flex items-center space-x-1">
                               <Users className="w-4 h-4 text-gray-400" />
-                              <span>{task.assignedTo}</span>
+                              <span>{renderValue(task.assignedTo) || 'Unassigned'}</span>
                             </span>
                             <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">
-                              {task.category}
+                              {renderValue(task.category) || 'Uncategorized'}
                             </span>
                           </div>
                         </div>
