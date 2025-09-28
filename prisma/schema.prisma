@@ -1,0 +1,158 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String    @id @default(cuid())
+  email             String    @unique
+  name              String
+  passwordHash      String
+  role              String    @default("USER")
+  companyId         String?
+  emailVerified     Boolean   @default(false)
+  image             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  company           Company?  @relation(fields: [companyId], references: [id])
+  documents         Document[]
+  tasks             ComplianceTask[]
+  activities        Activity[]
+  sessions          Session[]
+}
+
+model Company {
+  id                String    @id @default(cuid())
+  name              String
+  type              String
+  industry          String
+  gstin             String?
+  pan               String?
+  cin               String?
+  address           String
+  city              String
+  state             String
+  pincode           String
+  phone             String
+  email             String
+  website           String?
+  employeeCount     Int       @default(1)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  users             User[]
+  documents         Document[]
+  tasks             ComplianceTask[]
+  subscriptions     Subscription[]
+}
+
+model Document {
+  id                String    @id @default(cuid())
+  title             String
+  type              String
+  category          String
+  content           String
+  status            String    @default("DRAFT")
+  companyId         String
+  userId            String
+  templateId        String?
+  fileUrl           String?
+  aiGenerated       Boolean   @default(false)
+  version           Int       @default(1)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  company           Company   @relation(fields: [companyId], references: [id])
+  user              User      @relation(fields: [userId], references: [id])
+  template          DocumentTemplate? @relation(fields: [templateId], references: [id])
+  signatures        Signature[]
+}
+
+model DocumentTemplate {
+  id                String    @id @default(cuid())
+  name              String
+  category          String
+  description       String
+  content           String
+  fields            String    // JSON string
+  isActive          Boolean   @default(true)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  documents         Document[]
+}
+
+model ComplianceTask {
+  id                String    @id @default(cuid())
+  title             String
+  description       String
+  type              String
+  category          String
+  dueDate           DateTime
+  status            String    @default("PENDING")
+  priority          String    @default("MEDIUM")
+  companyId         String
+  assignedToId      String?
+  completedAt       DateTime?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  company           Company   @relation(fields: [companyId], references: [id])
+  assignedTo        User?     @relation(fields: [assignedToId], references: [id])
+  activities        Activity[]
+}
+
+model Subscription {
+  id                String    @id @default(cuid())
+  companyId         String
+  plan              String
+  status            String    @default("ACTIVE")
+  startDate         DateTime  @default(now())
+  endDate           DateTime
+  amount            Float
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  
+  company           Company   @relation(fields: [companyId], references: [id])
+}
+
+model Activity {
+  id                String    @id @default(cuid())
+  type              String
+  description       String
+  userId            String
+  taskId            String?
+  metadata          String?   // JSON string
+  createdAt         DateTime  @default(now())
+  
+  user              User      @relation(fields: [userId], references: [id])
+  task              ComplianceTask? @relation(fields: [taskId], references: [id])
+}
+
+model Signature {
+  id                String    @id @default(cuid())
+  documentId        String
+  name              String
+  email             String
+  signedAt          DateTime?
+  ipAddress         String?
+  status            String    @default("PENDING")
+  createdAt         DateTime  @default(now())
+  
+  document          Document  @relation(fields: [documentId], references: [id])
+}
+
+model Session {
+  id                String    @id @default(cuid())
+  sessionToken      String    @unique
+  userId            String
+  expires           DateTime
+  createdAt         DateTime  @default(now())
+  
+  user              User      @relation(fields: [userId], references: [id])
+}
