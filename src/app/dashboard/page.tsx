@@ -1,234 +1,214 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { useState, useEffect } from 'react'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { FileText, Calendar, AlertCircle, TrendingUp, Users, DollarSign } from 'lucide-react'
 import Link from 'next/link'
+import {
+  FileText,
+  CheckSquare,
+  AlertCircle,
+  TrendingUp,
+  Clock,
+  Users,
+  Calendar,
+  BarChart3,
+  ArrowRight,
+  Plus,
+  Bot
+} from 'lucide-react'
 
 export default function DashboardPage() {
+  const [user, setUser] = useState({ name: 'Rajesh' })
   const [stats, setStats] = useState({
-    documents: 0,
-    pendingTasks: 0,
-    overdueTasks: 0,
-    activeUsers: 0,
+    totalDocuments: 156,
+    pendingTasks: 12,
+    completedTasks: 89,
+    complianceScore: 92
   })
-  const [recentDocuments, setRecentDocuments] = useState([])
-  const [upcomingTasks, setUpcomingTasks] = useState([])
 
-  useEffect(() => {
-    fetchDashboardData()
-  }, [])
+  const upcomingTasks = [
+    { id: 1, title: 'GST Return Filing', dueDate: '2025-01-10', priority: 'high' },
+    { id: 2, title: 'TDS Payment Q3', dueDate: '2025-01-07', priority: 'critical' },
+    { id: 3, title: 'PF Return', dueDate: '2025-01-15', priority: 'medium' },
+    { id: 4, title: 'Professional Tax', dueDate: '2025-01-07', priority: 'high' },
+  ]
 
-  const fetchDashboardData = async () => {
-    try {
-      const token = localStorage.getItem('token')
-      
-      // Fetch documents
-      const docsRes = await fetch('/api/documents', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      const docsData = await docsRes.json()
-      
-      // Fetch tasks
-      const tasksRes = await fetch('/api/compliance/tasks', {
-        headers: { 'Authorization': `Bearer ${token}` }
-      })
-      const tasksData = await tasksRes.json()
-      
-      // Update stats
-      setStats({
-        documents: docsData.documents?.length || 0,
-        pendingTasks: tasksData.tasks?.filter((t: any) => t.status === 'PENDING').length || 0,
-        overdueTasks: tasksData.tasks?.filter((t: any) => 
-          new Date(t.dueDate) < new Date() && t.status !== 'COMPLETED'
-        ).length || 0,
-        activeUsers: 1,
-      })
-      
-      setRecentDocuments(docsData.documents?.slice(0, 5) || [])
-      setUpcomingTasks(tasksData.tasks?.slice(0, 5) || [])
-    } catch (error) {
-      console.error('Failed to fetch dashboard data:', error)
-    }
-  }
+  const recentDocuments = [
+    { id: 1, title: 'Employment Agreement - John Doe', status: 'signed', date: '2024-12-28' },
+    { id: 2, title: 'Service Agreement - ABC Corp', status: 'draft', date: '2024-12-27' },
+    { id: 3, title: 'NDA - XYZ Ltd', status: 'review', date: '2024-12-26' },
+  ]
 
-  const statsCards = [
-    {
-      title: 'Total Documents',
-      value: stats.documents,
-      icon: FileText,
-      color: 'text-blue-600',
-      bgColor: 'bg-blue-100',
-    },
-    {
-      title: 'Pending Tasks',
-      value: stats.pendingTasks,
-      icon: Calendar,
-      color: 'text-yellow-600',
-      bgColor: 'bg-yellow-100',
-    },
-    {
-      title: 'Overdue Tasks',
-      value: stats.overdueTasks,
-      icon: AlertCircle,
-      color: 'text-red-600',
-      bgColor: 'bg-red-100',
-    },
-    {
-      title: 'Active Users',
-      value: stats.activeUsers,
-      icon: Users,
-      color: 'text-green-600',
-      bgColor: 'bg-green-100',
-    },
+  const quickActions = [
+    { title: 'Generate Document', icon: FileText, color: 'bg-blue-500', link: '/dashboard/documents/new' },
+    { title: 'Add Task', icon: Plus, color: 'bg-green-500', link: '/dashboard/compliance/new' },
+    { title: 'AI Assistant', icon: Bot, color: 'bg-purple-500', link: '/dashboard/ai-assistant' },
+    { title: 'View Reports', icon: BarChart3, color: 'bg-orange-500', link: '/dashboard/reports' },
   ]
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Dashboard</h1>
-        <p className="text-gray-600">Welcome back! Here's an overview of your compliance status.</p>
+      {/* Welcome Header */}
+      <div className="bg-gradient-to-r from-primary to-blue-600 rounded-lg p-6 text-white">
+        <h1 className="text-2xl font-bold mb-2">Welcome back, {user.name}! 👋</h1>
+        <p className="text-white/90">
+          Your compliance score is {stats.complianceScore}% - Great job keeping up with deadlines!
+        </p>
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        {statsCards.map((stat, index) => (
-          <Card key={index}>
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-sm font-medium">
-                {stat.title}
-              </CardTitle>
-              <div className={`p-2 rounded-full ${stat.bgColor}`}>
-                <stat.icon className={`h-4 w-4 ${stat.color}`} />
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-bold">{stat.value}</div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Recent Documents */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
-          <CardHeader>
-            <CardTitle>Recent Documents</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Total Documents</CardTitle>
+            <FileText className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {recentDocuments.length > 0 ? (
-                recentDocuments.map((doc: any) => (
-                  <div
-                    key={doc.id}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded"
-                  >
-                    <div>
-                      <p className="font-medium">{doc.title}</p>
-                      <p className="text-sm text-gray-600">{doc.type}</p>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      doc.status === 'SIGNED' ? 'bg-green-100 text-green-600' :
-                      doc.status === 'DRAFT' ? 'bg-gray-100 text-gray-600' :
-                      'bg-yellow-100 text-yellow-600'
-                    }`}>
-                      {doc.status}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500 text-center py-4">No documents yet</p>
-              )}
-            </div>
-            <div className="mt-4">
-              <Link href="/dashboard/documents">
-                <Button variant="outline" className="w-full">
-                  View All Documents
-                </Button>
-              </Link>
-            </div>
+            <div className="text-2xl font-bold">{stats.totalDocuments}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+12%</span> from last month
+            </p>
           </CardContent>
         </Card>
 
-        {/* Upcoming Tasks */}
         <Card>
-          <CardHeader>
-            <CardTitle>Upcoming Compliance Tasks</CardTitle>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Pending Tasks</CardTitle>
+            <Clock className="w-4 h-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {upcomingTasks.length > 0 ? (
-                upcomingTasks.map((task: any) => (
-                  <div
-                    key={task.id}
-                    className="flex items-center justify-between p-2 hover:bg-gray-50 rounded"
-                  >
-                    <div>
-                      <p className="font-medium">{task.title}</p>
-                      <p className="text-sm text-gray-600">
-                        Due: {new Date(task.dueDate).toLocaleDateString()}
-                      </p>
-                    </div>
-                    <span className={`text-xs px-2 py-1 rounded-full ${
-                      task.priority === 'CRITICAL' ? 'bg-red-100 text-red-600' :
-                      task.priority === 'HIGH' ? 'bg-orange-100 text-orange-600' :
-                      task.priority === 'MEDIUM' ? 'bg-yellow-100 text-yellow-600' :
-                      'bg-gray-100 text-gray-600'
-                    }`}>
-                      {task.priority}
-                    </span>
-                  </div>
-                ))
-              ) : (
-                <p className="text-gray-500 text-center py-4">No pending tasks</p>
-              )}
-            </div>
-            <div className="mt-4">
-              <Link href="/dashboard/compliance">
-                <Button variant="outline" className="w-full">
-                  View All Tasks
-                </Button>
-              </Link>
+            <div className="text-2xl font-bold">{stats.pendingTasks}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-yellow-600">3 due this week</span>
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Completed Tasks</CardTitle>
+            <CheckSquare className="w-4 h-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.completedTasks}</div>
+            <p className="text-xs text-muted-foreground">
+              <span className="text-green-600">+8%</span> from last month
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between pb-2">
+            <CardTitle className="text-sm font-medium">Compliance Score</CardTitle>
+            <TrendingUp className="w-4 h-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.complianceScore}%</div>
+            <div className="w-full bg-gray-200 rounded-full h-2 mt-2">
+              <div 
+                className="bg-green-600 h-2 rounded-full transition-all"
+                style={{ width: `${stats.complianceScore}%` }}
+              />
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Quick Actions</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Link href="/dashboard/documents/new">
-              <Button variant="outline" className="w-full h-24 flex flex-col">
-                <FileText className="h-6 w-6 mb-2" />
-                <span className="text-xs">Generate Document</span>
-              </Button>
-            </Link>
-            <Link href="/dashboard/compliance/new">
-              <Button variant="outline" className="w-full h-24 flex flex-col">
-                <Calendar className="h-6 w-6 mb-2" />
-                <span className="text-xs">Add Task</span>
-              </Button>
-            </Link>
-            <Link href="/dashboard/documents/templates">
-              <Button variant="outline" className="w-full h-24 flex flex-col">
-                <FileText className="h-6 w-6 mb-2" />
-                <span className="text-xs">Browse Templates</span>
-              </Button>
-            </Link>
-            <Link href="/dashboard/reports">
-              <Button variant="outline" className="w-full h-24 flex flex-col">
-                <TrendingUp className="h-6 w-6 mb-2" />
-                <span className="text-xs">View Reports</span>
-              </Button>
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        {quickActions.map((action, index) => (
+          <Link key={index} href={action.link}>
+            <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+              <CardContent className="p-6">
+                <div className={`w-12 h-12 ${action.color} rounded-lg flex items-center justify-center mb-4`}>
+                  <action.icon className="w-6 h-6 text-white" />
+                </div>
+                <h3 className="font-medium">{action.title}</h3>
+              </CardContent>
+            </Card>
+          </Link>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Upcoming Tasks */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Upcoming Compliance Tasks</CardTitle>
+              <Link href="/dashboard/compliance">
+                <Button variant="ghost" size="sm">
+                  View All <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {upcomingTasks.map((task) => (
+                <div key={task.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-2 h-8 rounded-full ${
+                      task.priority === 'critical' ? 'bg-red-500' :
+                      task.priority === 'high' ? 'bg-orange-500' :
+                      'bg-yellow-500'
+                    }`} />
+                    <div>
+                      <p className="font-medium">{task.title}</p>
+                      <p className="text-sm text-gray-600">Due: {new Date(task.dueDate).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                  <Link href={`/dashboard/compliance/${task.id}`}>
+                    <Button variant="outline" size="sm">View</Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Recent Documents */}
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Recent Documents</CardTitle>
+              <Link href="/dashboard/documents">
+                <Button variant="ghost" size="sm">
+                  View All <ArrowRight className="w-4 h-4 ml-1" />
+                </Button>
+              </Link>
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {recentDocuments.map((doc) => (
+                <div key={doc.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                  <div className="flex items-center space-x-3">
+                    <FileText className="w-5 h-5 text-gray-400" />
+                    <div>
+                      <p className="font-medium">{doc.title}</p>
+                      <p className="text-sm text-gray-600">
+                        <span className={`inline-block px-2 py-0.5 rounded text-xs ${
+                          doc.status === 'signed' ? 'bg-green-100 text-green-600' :
+                          doc.status === 'draft' ? 'bg-gray-100 text-gray-600' :
+                          'bg-yellow-100 text-yellow-600'
+                        }`}>
+                          {doc.status}
+                        </span>
+                        <span className="ml-2">{new Date(doc.date).toLocaleDateString()}</span>
+                      </p>
+                    </div>
+                  </div>
+                  <Link href={`/dashboard/documents/${doc.id}`}>
+                    <Button variant="outline" size="sm">Open</Button>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
