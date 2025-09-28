@@ -127,8 +127,8 @@ export default function DashboardLayout({
                 <User className="w-6 h-6 text-primary" />
               </div>
               <div className="flex-1">
-                <p className="text-sm font-medium">{user.name}</p>
-                <p className="text-xs text-gray-500">{user.company}</p>
+                <p className="text-sm font-medium">{user?.name || 'User'}</p>
+                <p className="text-xs text-gray-500">{user?.company || 'Company'}</p>
               </div>
             </div>
           </div>

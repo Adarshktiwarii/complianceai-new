@@ -51,7 +51,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Welcome Header */}
       <div className="bg-gradient-to-r from-primary to-blue-600 rounded-lg p-6 text-white">
-        <h1 className="text-2xl font-bold mb-2">Welcome back, {user.name}! 👋</h1>
+        <h1 className="text-2xl font-bold mb-2">Welcome back, {user?.name || 'User'}! 👋</h1>
         <p className="text-white/90">
           Your compliance score is {stats.complianceScore}% - Great job keeping up with deadlines!
         </p>
