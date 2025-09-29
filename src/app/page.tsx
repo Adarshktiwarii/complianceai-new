@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import { motion, useScroll, useTransform } from 'framer-motion'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { 
   ArrowRight, 
   CheckCircle, 
@@ -12,544 +12,760 @@ import {
   Bot, 
   Shield, 
   Clock, 
-  TrendingUp,
   Users,
   Star,
   Zap,
-  BarChart3,
-  Globe,
-  Award,
-  ChevronRight,
   Menu,
   X,
   Play,
-  Building,
-  Scale,
-  IndianRupee,
-  MessageSquare,
+  MousePointer,
+  Layers,
+  Target,
+  Briefcase,
+  Globe,
+  Heart,
+  ArrowUpRight,
+  ChevronRight,
+  Command,
+  Cpu,
+  Database,
   Lock,
-  Rocket
+  BarChart3,
+  GitBranch,
+  Share2,
+  Palette
 } from 'lucide-react'
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
+  const { scrollYProgress } = useScroll()
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0])
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8])
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20)
+  // Animated blob colors - Notion/Figma style
+  const blobAnimation = {
+    animate: {
+      transform: ['translate(0,0)', 'translate(30px,-30px)', 'translate(-30px,20px)', 'translate(0,0)'],
+      transition: {
+        duration: 10,
+        repeat: Infinity,
+        repeatType: "reverse" as const
+      }
     }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  }
 
   const features = [
     {
-      icon: Bot,
-      title: 'AI-Powered Document Generation',
-      description: 'Generate legal documents in seconds with our advanced AI trained on Indian law'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl flex items-center justify-center"><Bot className="w-6 h-6 text-white" /></div>,
+      title: 'AI That Understands Indian Law',
+      description: 'Our AI is specifically trained on Indian legal documents, GST rules, and compliance requirements.',
+      color: 'from-purple-50 to-pink-50'
     },
     {
-      icon: Shield,
-      title: 'Compliance Tracking',
-      description: 'Never miss a deadline with automated reminders and compliance calendar'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-xl flex items-center justify-center"><FileText className="w-6 h-6 text-white" /></div>,
+      title: 'Smart Document Editor',
+      description: 'Notion-like editor with AI suggestions, real-time collaboration, and version control.',
+      color: 'from-blue-50 to-cyan-50'
     },
     {
-      icon: FileText,
-      title: '500+ Legal Templates',
-      description: 'Access pre-approved templates for all business needs - contracts, agreements, notices'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-orange-500 to-red-500 rounded-xl flex items-center justify-center"><Shield className="w-6 h-6 text-white" /></div>,
+      title: 'Automated Compliance Tracking',
+      description: 'Never miss a deadline. We track all your GST, TDS, ROC filings automatically.',
+      color: 'from-orange-50 to-red-50'
     },
     {
-      icon: Clock,
-      title: 'Save 10+ Hours Weekly',
-      description: 'Automate repetitive legal work and focus on growing your business'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-xl flex items-center justify-center"><Clock className="w-6 h-6 text-white" /></div>,
+      title: 'Save 15+ Hours Every Week',
+      description: 'What takes lawyers hours, our AI does in seconds. Focus on growing your business.',
+      color: 'from-green-50 to-emerald-50'
     },
     {
-      icon: Scale,
-      title: 'Indian Law Compliant',
-      description: 'All documents comply with latest Indian regulations and legal requirements'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-indigo-500 to-purple-500 rounded-xl flex items-center justify-center"><Users className="w-6 h-6 text-white" /></div>,
+      title: 'Team Collaboration',
+      description: 'Work together on documents, share templates, and manage permissions easily.',
+      color: 'from-indigo-50 to-purple-50'
     },
     {
-      icon: Lock,
-      title: 'Bank-Grade Security',
-      description: 'Your data is encrypted and secured with enterprise-level protection'
+      icon: <div className="w-12 h-12 bg-gradient-to-br from-yellow-500 to-orange-500 rounded-xl flex items-center justify-center"><Zap className="w-6 h-6 text-white" /></div>,
+      title: 'Lightning Fast',
+      description: 'Generate complex legal documents in under 30 seconds with 98% accuracy.',
+      color: 'from-yellow-50 to-orange-50'
     }
   ]
 
   const testimonials = [
     {
-      name: 'Priya Sharma',
-      role: 'CFO, TechStart India',
-      content: 'ComplianceAI saved us lakhs in legal fees. We generated all our employment contracts and NDAs in minutes!',
+      name: 'Priya Mehta',
+      role: 'Founder, TechStartup',
+      content: 'ComplianceAI feels like having a legal team on demand. The UI is so intuitive, my team adopted it instantly.',
       rating: 5,
-      image: '👩‍💼'
+      avatar: '👩‍💼',
+      color: 'bg-gradient-to-br from-purple-400 to-pink-400'
     },
     {
-      name: 'Rajesh Kumar',
-      role: 'Founder, ExportHub',
-      content: 'The GST compliance tracking alone is worth it. Never missed a filing deadline since we started using ComplianceAI.',
+      name: 'Arjun Singh',
+      role: 'CFO, ExportCo',
+      content: 'The AI suggestions are mind-blowing. It caught compliance issues we hadn\'t even thought about.',
       rating: 5,
-      image: '👨‍💼'
+      avatar: '👨‍💼',
+      color: 'bg-gradient-to-br from-blue-400 to-cyan-400'
     },
     {
-      name: 'Amit Patel',
-      role: 'Legal Head, FinanceFlow',
-      content: 'AI-generated documents are surprisingly accurate. It understands Indian legal nuances perfectly.',
+      name: 'Neha Patel',
+      role: 'Legal Head, FinTech India',
+      content: 'Beautiful interface that makes legal work actually enjoyable. Saved us ₹20L in legal fees this year.',
       rating: 5,
-      image: '👨‍⚖️'
-    }
-  ]
-
-  const pricingPlans = [
-    {
-      name: 'Starter',
-      price: '₹4,999',
-      period: '/month',
-      description: 'Perfect for small businesses',
-      features: [
-        '50 Documents/month',
-        'Basic templates',
-        'Compliance calendar',
-        'Email support',
-        '1 User'
-      ],
-      highlighted: false
-    },
-    {
-      name: 'Business',
-      price: '₹14,999',
-      period: '/month',
-      description: 'For growing companies',
-      features: [
-        'Unlimited Documents',
-        'All templates + AI generation',
-        'Advanced compliance tracking',
-        'Priority support',
-        '5 Users',
-        'E-signature integration',
-        'API access'
-      ],
-      highlighted: true,
-      badge: 'Most Popular'
-    },
-    {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      description: 'For large organizations',
-      features: [
-        'Everything in Business',
-        'Unlimited users',
-        'Custom AI training',
-        'Dedicated account manager',
-        'SLA guarantee',
-        'On-premise deployment',
-        'Custom integrations'
-      ],
-      highlighted: false
-    }
-  ]
-
-  const stats = [
-    { value: '10,000+', label: 'Businesses Trust Us' },
-    { value: '1M+', label: 'Documents Generated' },
-    { value: '98%', label: 'Accuracy Rate' },
-    { value: '4.9/5', label: 'Customer Rating' }
-  ]
-
-  const faqs = [
-    {
-      question: 'Is ComplianceAI suitable for Indian businesses?',
-      answer: 'Yes! ComplianceAI is specifically designed for Indian businesses. All our templates and AI models are trained on Indian law, including GST, Company Law, Labor Laws, and more.'
-    },
-    {
-      question: 'How accurate are AI-generated documents?',
-      answer: 'Our AI maintains 98% accuracy rate. All generated documents are based on verified legal templates and can be reviewed and edited before finalizing.'
-    },
-    {
-      question: 'Can I customize the templates?',
-      answer: 'Absolutely! All templates are fully customizable. You can modify any section, add custom clauses, and save your own templates for future use.'
-    },
-    {
-      question: 'Is my data secure?',
-      answer: 'We use bank-grade encryption and security measures. Your data is stored in secure servers with regular backups and never shared with third parties.'
+      avatar: '👩‍⚖️',
+      color: 'bg-gradient-to-br from-green-400 to-emerald-400'
     }
   ]
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white overflow-hidden">
+      {/* Animated Background Blobs */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          className="absolute -top-48 -left-48 w-96 h-96 bg-purple-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+          animate={blobAnimation.animate}
+        />
+        <motion.div 
+          className="absolute -bottom-48 -right-48 w-96 h-96 bg-yellow-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+          animate={{
+            ...blobAnimation.animate,
+            transition: { ...blobAnimation.animate.transition, delay: 2 }
+          }}
+        />
+        <motion.div 
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-pink-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30"
+          animate={{
+            ...blobAnimation.animate,
+            transition: { ...blobAnimation.animate.transition, delay: 4 }
+          }}
+        />
+      </div>
+
       {/* Navigation */}
-      <nav className={`fixed top-0 w-full z-50 transition-all ${
-        scrolled ? 'bg-white/95 backdrop-blur shadow-sm' : 'bg-transparent'
-      }`}>
+      <nav className="relative z-50 bg-white/80 backdrop-blur-md border-b border-gray-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center">
-              <Link href="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-white" />
+              <Link href="/" className="flex items-center space-x-2 group">
+                <div className="relative">
+                  <div className="w-10 h-10 bg-black rounded-xl flex items-center justify-center transform group-hover:scale-110 transition-transform">
+                    <Sparkles className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl opacity-0 group-hover:opacity-100 blur transition-opacity -z-10" />
                 </div>
                 <span className="font-bold text-xl">ComplianceAI</span>
               </Link>
             </div>
             
-            <div className="hidden md:flex items-center space-x-8">
-              <Link href="#features" className="text-gray-700 hover:text-primary">Features</Link>
-              <Link href="#pricing" className="text-gray-700 hover:text-primary">Pricing</Link>
-              <Link href="#testimonials" className="text-gray-700 hover:text-primary">Testimonials</Link>
-              <Link href="#faq" className="text-gray-700 hover:text-primary">FAQ</Link>
+            <div className="hidden md:flex items-center space-x-1">
+              <Link href="#features" className="px-4 py-2 text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                Features
+              </Link>
+              <Link href="#how-it-works" className="px-4 py-2 text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                How it Works
+              </Link>
+              <Link href="#pricing" className="px-4 py-2 text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                Pricing
+              </Link>
+              <Link href="#testimonials" className="px-4 py-2 text-gray-700 hover:text-black hover:bg-gray-50 rounded-lg transition-colors">
+                Testimonials
+              </Link>
+            </div>
+
+            <div className="hidden md:flex items-center space-x-3">
               <Link href="/login">
-                <Button variant="ghost">Login</Button>
+                <Button variant="ghost" className="hover:bg-gray-50">
+                  Sign In
+                </Button>
               </Link>
               <Link href="/register">
-                <Button>Start Free Trial</Button>
+                <Button className="bg-black hover:bg-gray-800 text-white rounded-lg">
+                  Get Started Free
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
               </Link>
             </div>
 
             <button
-              className="md:hidden"
+              className="md:hidden p-2 rounded-lg hover:bg-gray-50"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X /> : <Menu />}
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
         </div>
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white border-t">
-            <div className="px-2 pt-2 pb-3 space-y-1">
-              <Link href="#features" className="block px-3 py-2 text-gray-700">Features</Link>
-              <Link href="#pricing" className="block px-3 py-2 text-gray-700">Pricing</Link>
-              <Link href="#testimonials" className="block px-3 py-2 text-gray-700">Testimonials</Link>
-              <Link href="/login" className="block px-3 py-2 text-gray-700">Login</Link>
-              <Link href="/register" className="block px-3 py-2">
-                <Button className="w-full">Start Free Trial</Button>
+          <motion.div 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="md:hidden bg-white border-t"
+          >
+            <div className="px-4 pt-2 pb-3 space-y-1">
+              <Link href="#features" className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50">Features</Link>
+              <Link href="#pricing" className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50">Pricing</Link>
+              <Link href="/login" className="block px-3 py-2 rounded-lg text-gray-700 hover:bg-gray-50">Sign In</Link>
+              <Link href="/register" className="block">
+                <Button className="w-full bg-black hover:bg-gray-800 text-white rounded-lg">
+                  Get Started Free
+                </Button>
               </Link>
             </div>
-          </div>
+          </motion.div>
         )}
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-24 pb-12 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      <section className="relative pt-20 pb-32 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center">
-            <div className="inline-flex items-center space-x-2 bg-primary/10 text-primary px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Rocket className="w-4 h-4" />
-              <span>Trusted by 10,000+ Indian Businesses</span>
-            </div>
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-center"
+          >
+            {/* Badge */}
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 px-4 py-1.5 rounded-full mb-8"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-sm font-medium text-gray-700">Trusted by 10,000+ Indian businesses</span>
+            </motion.div>
             
-            <h1 className="text-4xl md:text-6xl font-bold text-gray-900 mb-6">
-              Legal Compliance Made
-              <span className="bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent"> Simple with AI</span>
+            {/* Main Heading */}
+            <h1 className="text-5xl md:text-7xl font-bold text-gray-900 mb-6 leading-tight">
+              Legal work that
+              <span className="block bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent">
+                feels like magic
+              </span>
             </h1>
             
-            <p className="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-              Generate legal documents, track compliance deadlines, and get AI-powered legal assistance - 
-              all designed specifically for Indian businesses.
+            <p className="text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+              Generate legal documents, track compliance, and get AI assistance. 
+              Built specifically for Indian businesses. As intuitive as Notion, as powerful as having your own legal team.
             </p>
             
+            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
               <Link href="/register">
-                <Button size="lg" className="w-full sm:w-auto">
-                  Start 14-Day Free Trial
-                  <ArrowRight className="w-5 h-5 ml-2" />
+                <Button size="lg" className="bg-black hover:bg-gray-800 text-white rounded-xl px-8 group">
+                  Start Free Trial
+                  <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button size="lg" variant="outline" className="w-full sm:w-auto">
-                <Play className="w-5 h-5 mr-2" />
-                Watch Demo
+              <Button size="lg" variant="outline" className="rounded-xl px-8 group border-gray-300">
+                <Play className="w-4 h-4 mr-2" />
+                Watch 2-min Demo
               </Button>
             </div>
 
-            <div className="flex items-center justify-center space-x-8 text-sm text-gray-600">
+            {/* Trust Indicators */}
+            <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-4 text-sm text-gray-500">
               <span className="flex items-center">
-                <CheckCircle className="w-5 h-5 text-green-500 mr-1" />
-                No Credit Card Required
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" />
+                No credit card required
               </span>
               <span className="flex items-center">
-                <CheckCircle className="w-5 h-5 text-green-500 mr-1" />
-                Cancel Anytime
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" />
+                14-day free trial
               </span>
               <span className="flex items-center">
-                <CheckCircle className="w-5 h-5 text-green-500 mr-1" />
-                GDPR Compliant
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" />
+                Cancel anytime
+              </span>
+              <span className="flex items-center">
+                <CheckCircle className="w-4 h-4 text-green-500 mr-1.5" />
+                GDPR compliant
               </span>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Hero Image/Demo */}
-          <div className="mt-16 relative">
-            <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 pointer-events-none" />
-            <div className="bg-white rounded-xl shadow-2xl p-2">
-              <div className="bg-gradient-to-br from-gray-50 to-gray-100 rounded-lg p-8">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  <div className="bg-white p-4 rounded-lg shadow">
-                    <FileText className="w-8 h-8 text-primary mb-2" />
-                    <h3 className="font-semibold">Employment Agreement</h3>
-                    <p className="text-sm text-gray-600">Generated in 30 seconds</p>
+          {/* Hero Visual */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.7, delay: 0.2 }}
+            className="mt-20 relative"
+          >
+            <div className="relative mx-auto max-w-6xl">
+              {/* Main App Preview */}
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-gray-200">
+                <div className="bg-gradient-to-br from-gray-50 to-white p-8">
+                  {/* Fake Browser Bar */}
+                  <div className="bg-white rounded-t-lg border border-gray-200 px-4 py-3 flex items-center space-x-2">
+                    <div className="flex space-x-1.5">
+                      <div className="w-3 h-3 bg-red-500 rounded-full" />
+                      <div className="w-3 h-3 bg-yellow-500 rounded-full" />
+                      <div className="w-3 h-3 bg-green-500 rounded-full" />
+                    </div>
+                    <div className="flex-1 flex justify-center">
+                      <div className="bg-gray-100 rounded px-3 py-1 text-xs text-gray-600">
+                        app.complianceai.com
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-white p-4 rounded-lg shadow">
-                    <Shield className="w-8 h-8 text-green-500 mb-2" />
-                    <h3 className="font-semibold">GST Compliance</h3>
-                    <p className="text-sm text-gray-600">Next deadline: 5 days</p>
-                  </div>
-                  <div className="bg-white p-4 rounded-lg shadow">
-                    <Bot className="w-8 h-8 text-purple-500 mb-2" />
-                    <h3 className="font-semibold">AI Assistant</h3>
-                    <p className="text-sm text-gray-600">24/7 Legal Support</p>
+                  
+                  {/* App Content Preview */}
+                  <div className="bg-white rounded-b-lg border-x border-b border-gray-200 p-6">
+                    <div className="space-y-4">
+                      {/* AI Chat Preview */}
+                      <div className="flex items-start space-x-3">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg flex items-center justify-center flex-shrink-0">
+                          <Bot className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="flex-1">
+                          <div className="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-3">
+                            <p className="text-sm text-gray-700">
+                              "I'll help you generate an employment agreement. What's the employee's role and salary?"
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      
+                      {/* Document Cards */}
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                        <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+                          <FileText className="w-6 h-6 text-blue-600 mb-2" />
+                          <h4 className="font-medium text-sm">Employment Agreement</h4>
+                          <p className="text-xs text-gray-600 mt-1">Generated • Ready to sign</p>
+                        </div>
+                        <div className="p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg border border-green-200">
+                          <Shield className="w-6 h-6 text-green-600 mb-2" />
+                          <h4 className="font-medium text-sm">GST Compliance</h4>
+                          <p className="text-xs text-gray-600 mt-1">All filings up to date</p>
+                        </div>
+                        <div className="p-4 bg-gradient-to-br from-orange-50 to-red-50 rounded-lg border border-orange-200">
+                          <Clock className="w-6 h-6 text-orange-600 mb-2" />
+                          <h4 className="font-medium text-sm">TDS Payment Due</h4>
+                          <p className="text-xs text-gray-600 mt-1">Due in 5 days</p>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              {/* Floating Elements */}
+              <motion.div 
+                animate={{ y: [0, -10, 0] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute -top-8 -left-8 bg-white rounded-xl shadow-lg p-3 border border-gray-100"
+              >
+                <div className="flex items-center space-x-2">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span className="text-sm font-medium">Contract Generated</span>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                animate={{ y: [0, 10, 0] }}
+                transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                className="absolute -bottom-8 -right-8 bg-white rounded-xl shadow-lg p-3 border border-gray-100"
+              >
+                <div className="flex items-center space-x-2">
+                  <Users className="w-5 h-5 text-blue-500" />
+                  <span className="text-sm font-medium">Team Collaboration</span>
+                </div>
+              </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-12 bg-primary text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold mb-2">{stat.value}</div>
-                <div className="text-primary-foreground/80">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Features Section */}
-      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Features Grid */}
+      <section id="features" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Everything You Need for Legal Compliance
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Everything you need,
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> nothing you don't</span>
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              From document generation to compliance tracking, we've got you covered
+              A perfectly crafted set of features for Indian businesses. No bloat, no complexity.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <Card key={index} className="hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-4">
-                    <feature.icon className="w-6 h-6 text-primary" />
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="group relative"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity`} />
+                <div className="relative bg-white rounded-2xl p-6 border border-gray-200 hover:border-gray-300 transition-all hover:shadow-lg">
+                  <div className="mb-4">
+                    {feature.icon}
                   </div>
-                  <CardTitle>{feature.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{feature.description}</p>
-                </CardContent>
-              </Card>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    {feature.title}
+                  </h3>
+                  <p className="text-gray-600">
+                    {feature.description}
+                  </p>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* How It Works */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="how-it-works" className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              How ComplianceAI Works
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Get started in minutes
             </h2>
-            <p className="text-xl text-gray-600">Get started in 3 simple steps</p>
+            <p className="text-xl text-gray-600">
+              No complex setup. No training required. Just sign up and start.
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                1
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-purple-100 to-pink-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-purple-200">
+                <span className="text-2xl font-bold text-purple-600">1</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Sign Up & Setup</h3>
-              <p className="text-gray-600">Create your account and tell us about your business. Takes less than 2 minutes.</p>
-            </div>
+              <h3 className="text-xl font-semibold mb-2">Sign up in 30 seconds</h3>
+              <p className="text-gray-600">
+                No credit card. No complex forms. Just your email and you're in.
+              </p>
+            </motion.div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                2
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="text-center"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-blue-100 to-cyan-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-blue-200">
+                <span className="text-2xl font-bold text-blue-600">2</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Choose or Generate</h3>
-              <p className="text-gray-600">Select from templates or describe your needs to our AI for custom documents.</p>
-            </div>
+              <h3 className="text-xl font-semibold mb-2">Tell AI what you need</h3>
+              <p className="text-gray-600">
+                Describe your requirement in plain English. Our AI understands context.
+              </p>
+            </motion.div>
             
-            <div className="text-center">
-              <div className="w-16 h-16 bg-primary rounded-full flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
-                3
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="text-center"
+            >
+              <div className="w-20 h-20 bg-gradient-to-br from-green-100 to-emerald-100 rounded-2xl flex items-center justify-center mx-auto mb-4 border-2 border-green-200">
+                <span className="text-2xl font-bold text-green-600">3</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Download & Track</h3>
-              <p className="text-gray-600">Get your documents instantly and let us track all compliance deadlines for you.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing Section */}
-      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Simple, Transparent Pricing
-            </h2>
-            <p className="text-xl text-gray-600">Choose the plan that fits your business</p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {pricingPlans.map((plan, index) => (
-              <Card key={index} className={`relative ${plan.highlighted ? 'border-primary shadow-xl' : ''}`}>
-                {plan.badge && (
-                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-primary text-white px-4 py-1 rounded-full text-sm">
-                      {plan.badge}
-                    </span>
-                  </div>
-                )}
-                <CardHeader>
-                  <CardTitle className="text-2xl">{plan.name}</CardTitle>
-                  <CardDescription>{plan.description}</CardDescription>
-                  <div className="mt-4">
-                    <span className="text-4xl font-bold">{plan.price}</span>
-                    <span className="text-gray-600">{plan.period}</span>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-3 mb-6">
-                    {plan.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start">
-                        <CheckCircle className="w-5 h-5 text-green-500 mr-2 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                  <Button className={`w-full ${plan.highlighted ? '' : 'variant-outline'}`}>
-                    {plan.name === 'Enterprise' ? 'Contact Sales' : 'Start Free Trial'}
-                  </Button>
-                </CardContent>
-              </Card>
-            ))}
+              <h3 className="text-xl font-semibold mb-2">Get perfect documents</h3>
+              <p className="text-gray-600">
+                Download, edit, share. All your compliance tracking automated.
+              </p>
+            </motion.div>
           </div>
         </div>
       </section>
 
       {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50">
+      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Loved by Indian Businesses
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Loved by forward-thinking teams
             </h2>
-            <p className="text-xl text-gray-600">See what our customers have to say</p>
+            <p className="text-xl text-gray-600">
+              Join thousands of businesses already saving time and money
+            </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index}>
-                <CardContent className="pt-6">
-                  <div className="flex mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                    ))}
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
+              >
+                <div className="flex mb-4">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                  ))}
+                </div>
+                <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
+                <div className="flex items-center">
+                  <div className={`w-12 h-12 ${testimonial.color} rounded-full flex items-center justify-center text-white text-xl`}>
+                    {testimonial.avatar}
                   </div>
-                  <p className="text-gray-700 mb-4">"{testimonial.content}"</p>
-                  <div className="flex items-center">
-                    <div className="text-3xl mr-3">{testimonial.image}</div>
-                    <div>
-                      <p className="font-semibold">{testimonial.name}</p>
-                      <p className="text-sm text-gray-600">{testimonial.role}</p>
-                    </div>
+                  <div className="ml-3">
+                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                    <p className="text-sm text-gray-600">{testimonial.role}</p>
                   </div>
-                </CardContent>
-              </Card>
+                </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* FAQ Section */}
-      <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Frequently Asked Questions
+      {/* Pricing */}
+      <section id="pricing" className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+              Simple pricing that scales
             </h2>
+            <p className="text-xl text-gray-600">
+              Start free. Upgrade when you need. Cancel anytime.
+            </p>
           </div>
 
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle className="text-lg">{faq.question}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-gray-600">{faq.answer}</p>
-                </CardContent>
-              </Card>
-            ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            {/* Starter Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-all"
+            >
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-2">Starter</h3>
+                <p className="text-gray-600 text-sm">For small businesses</p>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">₹4,999</span>
+                  <span className="text-gray-600">/month</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">50 AI document generations</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Basic compliance tracking</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Email support</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">1 team member</span>
+                </li>
+              </ul>
+              <Button className="w-full bg-gray-100 text-gray-900 hover:bg-gray-200 rounded-lg">
+                Start Free Trial
+              </Button>
+            </motion.div>
+
+            {/* Professional Plan - Featured */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="relative bg-gradient-to-b from-gray-900 to-black text-white rounded-2xl p-8 shadow-xl scale-105"
+            >
+              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  Most Popular
+                </span>
+              </div>
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-2">Professional</h3>
+                <p className="text-gray-400 text-sm">For growing teams</p>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">₹14,999</span>
+                  <span className="text-gray-400">/month</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>Unlimited AI generations</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>Advanced compliance suite</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>Priority support</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>5 team members</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>API access</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-400 mr-3 mt-0.5" />
+                  <span>Custom templates</span>
+                </li>
+              </ul>
+              <Button className="w-full bg-white text-black hover:bg-gray-100 rounded-lg">
+                Start Free Trial
+              </Button>
+            </motion.div>
+
+            {/* Enterprise Plan */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl p-8 border border-gray-200 hover:shadow-xl transition-all"
+            >
+              <div className="mb-8">
+                <h3 className="text-xl font-bold mb-2">Enterprise</h3>
+                <p className="text-gray-600 text-sm">For large organizations</p>
+                <div className="mt-4">
+                  <span className="text-4xl font-bold">Custom</span>
+                </div>
+              </div>
+              <ul className="space-y-4 mb-8">
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Everything in Professional</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Unlimited team members</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Custom AI training</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">Dedicated support</span>
+                </li>
+                <li className="flex items-start">
+                  <CheckCircle className="w-5 h-5 text-green-500 mr-3 mt-0.5" />
+                  <span className="text-gray-700">On-premise option</span>
+                </li>
+              </ul>
+              <Button className="w-full bg-gray-100 text-gray-900 hover:bg-gray-200 rounded-lg">
+                Contact Sales
+              </Button>
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-primary text-white">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">
-            Ready to Simplify Your Legal Compliance?
-          </h2>
-          <p className="text-xl mb-8 text-primary-foreground/90">
-            Join 10,000+ businesses saving time and money with ComplianceAI
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/register">
-              <Button size="lg" variant="secondary">
-                Start Your Free Trial
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
-            <Button size="lg" variant="outline" className="bg-white/10 text-white border-white/30 hover:bg-white/20">
-              <MessageSquare className="w-5 h-5 mr-2" />
-              Talk to Sales
-            </Button>
-          </div>
-          <p className="mt-6 text-sm text-primary-foreground/70">
-            No credit card required • 14-day free trial • Cancel anytime
-          </p>
+      {/* Final CTA */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            className="relative bg-gradient-to-br from-purple-600 via-pink-600 to-blue-600 rounded-3xl p-12 text-center text-white overflow-hidden"
+          >
+            {/* Decorative Elements */}
+            <div className="absolute top-0 left-0 w-40 h-40 bg-white/10 rounded-full -translate-x-20 -translate-y-20" />
+            <div className="absolute bottom-0 right-0 w-60 h-60 bg-white/10 rounded-full translate-x-30 translate-y-30" />
+            
+            <div className="relative z-10">
+              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+                Ready to transform your legal workflow?
+              </h2>
+              <p className="text-xl mb-8 text-white/90">
+                Join 10,000+ businesses already saving time with ComplianceAI
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Link href="/register">
+                  <Button size="lg" className="bg-white text-purple-600 hover:bg-gray-100 rounded-xl px-8">
+                    Get Started Free
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                </Link>
+                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 rounded-xl px-8">
+                  Schedule Demo
+                </Button>
+              </div>
+              <p className="mt-6 text-sm text-white/70">
+                No credit card required • 14-day free trial • Cancel anytime
+              </p>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-gray-900 text-white">
+      <footer className="py-12 px-4 sm:px-6 lg:px-8 bg-black text-white">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
+            <div className="col-span-2 md:col-span-1">
               <div className="flex items-center space-x-2 mb-4">
                 <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-                  <Sparkles className="w-5 h-5 text-primary" />
+                  <Sparkles className="w-5 h-5 text-black" />
                 </div>
                 <span className="font-bold text-xl">ComplianceAI</span>
               </div>
-              <p className="text-gray-400">
-                Making legal compliance simple for Indian businesses.
+              <p className="text-gray-400 text-sm">
+                Making legal simple for Indian businesses.
               </p>
+              <div className="flex space-x-4 mt-4">
+                <Link href="#" className="text-gray-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                  </svg>
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                  </svg>
+                </Link>
+                <Link href="#" className="text-gray-400 hover:text-white">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </Link>
+              </div>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Product</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="#features" className="hover:text-white">Features</Link></li>
-                <li><Link href="#pricing" className="hover:text-white">Pricing</Link></li>
-                <li><Link href="#" className="hover:text-white">API</Link></li>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><Link href="#" className="hover:text-white">Features</Link></li>
+                <li><Link href="#" className="hover:text-white">Pricing</Link></li>
+                <li><Link href="#" className="hover:text-white">Templates</Link></li>
                 <li><Link href="#" className="hover:text-white">Integrations</Link></li>
               </ul>
             </div>
             
             <div>
               <h3 className="font-semibold mb-4">Company</h3>
-              <ul className="space-y-2 text-gray-400">
+              <ul className="space-y-2 text-gray-400 text-sm">
                 <li><Link href="#" className="hover:text-white">About</Link></li>
                 <li><Link href="#" className="hover:text-white">Blog</Link></li>
                 <li><Link href="#" className="hover:text-white">Careers</Link></li>
@@ -559,17 +775,22 @@ export default function LandingPage() {
             
             <div>
               <h3 className="font-semibold mb-4">Legal</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li><Link href="#" className="hover:text-white">Privacy Policy</Link></li>
-                <li><Link href="#" className="hover:text-white">Terms of Service</Link></li>
+              <ul className="space-y-2 text-gray-400 text-sm">
+                <li><Link href="#" className="hover:text-white">Privacy</Link></li>
+                <li><Link href="#" className="hover:text-white">Terms</Link></li>
                 <li><Link href="#" className="hover:text-white">Security</Link></li>
-                <li><Link href="#" className="hover:text-white">Compliance</Link></li>
+                <li><Link href="#" className="hover:text-white">Cookies</Link></li>
               </ul>
             </div>
           </div>
           
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; 2024 ComplianceAI. All rights reserved. Made with ❤️ in India</p>
+          <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-400 text-sm">
+              © 2024 ComplianceAI. All rights reserved.
+            </p>
+            <p className="text-gray-400 text-sm mt-4 md:mt-0">
+              Made with ❤️ in India 🇮🇳
+            </p>
           </div>
         </div>
       </footer>
