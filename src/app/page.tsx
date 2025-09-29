@@ -33,8 +33,11 @@ import {
   BarChart3,
   GitBranch,
   Share2,
-  Palette
+  Palette,
+  Award,
+  TrendingUp
 } from 'lucide-react'
+import CountUp from 'react-countup'
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -526,6 +529,167 @@ export default function LandingPage() {
                     <p className="font-semibold text-gray-900">{testimonial.name}</p>
                     <p className="text-sm text-gray-600">{testimonial.role}</p>
                   </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Integration Partners Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Integrates with your existing tools
+            </h2>
+            <p className="text-xl text-gray-600">
+              Seamlessly connect with the tools you already use
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+            {[
+              { name: 'Zoho Books', logo: '📊' },
+              { name: 'Tally', logo: '📈' },
+              { name: 'Google Drive', logo: '☁️' },
+              { name: 'Slack', logo: '💬' },
+              { name: 'WhatsApp Business', logo: '📱' },
+              { name: 'Razorpay', logo: '💳' },
+            ].map((integration, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.05 }}
+                className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-all text-center"
+              >
+                <div className="text-4xl mb-2">{integration.logo}</div>
+                <p className="text-sm font-medium text-gray-700">{integration.name}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Live Stats Counter */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { value: 10000, suffix: '+', label: 'Active Businesses', prefix: '' },
+              { value: 1000000, suffix: '+', label: 'Documents Generated', prefix: '' },
+              { value: 50, suffix: 'L+', label: 'Money Saved', prefix: '₹' },
+              { value: 99.9, suffix: '%', label: 'Uptime SLA', prefix: '' },
+            ].map((stat, index) => (
+              <div key={index} className="text-center">
+                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                  <CountUp
+                    end={stat.value}
+                    duration={2.5}
+                    separator=","
+                    prefix={stat.prefix}
+                    suffix={stat.suffix}
+                    enableScrollSpy
+                    scrollSpyOnce
+                  />
+                </div>
+                <p className="text-gray-600">{stat.label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Security & Compliance Badges */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-b bg-gray-50">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-8">
+            <h3 className="text-2xl font-bold text-gray-900 mb-2">
+              Enterprise-Grade Security & Compliance
+            </h3>
+            <p className="text-gray-600">Your data is protected with industry-leading security standards</p>
+          </div>
+          
+          <div className="flex flex-wrap justify-center items-center gap-8">
+            {[
+              { name: 'ISO 27001', icon: Shield },
+              { name: 'GDPR Compliant', icon: Lock },
+              { name: 'SOC 2 Type II', icon: Award },
+              { name: '256-bit SSL', icon: Lock },
+              { name: 'VAPT Tested', icon: Shield },
+            ].map((badge, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                className="flex flex-col items-center"
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-2">
+                  <badge.icon className="w-8 h-8 text-gray-700" />
+                </div>
+                <span className="text-sm font-medium text-gray-700">{badge.name}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Use Cases Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Built for every Indian business
+            </h2>
+            <p className="text-xl text-gray-600">
+              From startups to enterprises, we've got you covered
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                title: 'Startups',
+                description: 'Get all incorporation documents, employment agreements, and compliance tracking from day one.',
+                features: ['Company Registration', 'ESOP Agreements', 'Investor Documents'],
+                gradient: 'from-purple-500 to-pink-500'
+              },
+              {
+                title: 'SMEs',
+                description: 'Streamline your legal operations with automated compliance and document management.',
+                features: ['GST Compliance', 'Vendor Agreements', 'HR Documents'],
+                gradient: 'from-blue-500 to-cyan-500'
+              },
+              {
+                title: 'Enterprises',
+                description: 'Scale your legal operations with custom workflows and advanced automation.',
+                features: ['Custom Workflows', 'Multi-entity Support', 'API Integration'],
+                gradient: 'from-green-500 to-emerald-500'
+              }
+            ].map((useCase, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="relative group"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${useCase.gradient} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity`} />
+                <div className="relative bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-xl transition-all h-full">
+                  <h3 className="text-xl font-bold text-gray-900 mb-3">{useCase.title}</h3>
+                  <p className="text-gray-600 mb-4">{useCase.description}</p>
+                  <ul className="space-y-2">
+                    {useCase.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-gray-700">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               </motion.div>
             ))}

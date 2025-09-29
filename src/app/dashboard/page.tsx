@@ -15,7 +15,9 @@ import {
   BarChart3,
   ArrowRight,
   Plus,
-  Bot
+  Bot,
+  Sparkles,
+  Shield
 } from 'lucide-react'
 
 export default function DashboardPage() {
@@ -209,6 +211,127 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* AI Insights Widget */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            <span>AI Legal Insights</span>
+            <Sparkles className="w-5 h-5 text-purple-600" />
+          </CardTitle>
+          <CardDescription>Personalized recommendations based on your business</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            <div className="p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-200">
+              <div className="flex items-start space-x-2">
+                <AlertCircle className="w-5 h-5 text-purple-600 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-gray-900">New Compliance Requirement</p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    New GST rules effective from April 1st. Your business category requires updated documentation.
+                  </p>
+                  <Button size="sm" className="mt-2">Learn More</Button>
+                </div>
+              </div>
+            </div>
+            
+            <div className="p-3 bg-gradient-to-r from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
+              <div className="flex items-start space-x-2">
+                <TrendingUp className="w-5 h-5 text-blue-600 mt-0.5" />
+                <div>
+                  <p className="text-sm font-medium text-gray-900">Cost Saving Opportunity</p>
+                  <p className="text-xs text-gray-600 mt-1">
+                    Switch to quarterly GST filing and save ₹15,000 annually in compliance costs.
+                  </p>
+                  <Button size="sm" variant="outline" className="mt-2">Review Option</Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Legal Health Score */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Legal Health Score</CardTitle>
+          <CardDescription>Your overall compliance status</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center">
+            <div className="relative inline-flex items-center justify-center w-32 h-32">
+              <svg className="w-32 h-32 transform -rotate-90">
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="56"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  className="text-gray-200"
+                />
+                <circle
+                  cx="64"
+                  cy="64"
+                  r="56"
+                  stroke="currentColor"
+                  strokeWidth="8"
+                  fill="none"
+                  strokeDasharray={351.86}
+                  strokeDashoffset={351.86 * (1 - 0.85)}
+                  className="text-green-500 transition-all duration-500"
+                />
+              </svg>
+              <span className="absolute text-3xl font-bold">85%</span>
+            </div>
+            <p className="mt-4 text-sm text-gray-600">Good Standing</p>
+            
+            <div className="mt-6 space-y-2 text-left">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Document Compliance</span>
+                <span className="font-medium text-green-600">✓ 100%</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Filing Deadlines</span>
+                <span className="font-medium text-green-600">✓ On Track</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Regulatory Updates</span>
+                <span className="font-medium text-yellow-600">⚠ 2 Pending</span>
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Smart Document Suggestions */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Recommended Documents</CardTitle>
+          <CardDescription>Based on your business profile</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[
+              { name: 'Privacy Policy Update', reason: 'GDPR compliance', urgency: 'high' },
+              { name: 'Employee Handbook', reason: 'Team size > 10', urgency: 'medium' },
+              { name: 'Vendor Agreement Template', reason: 'Frequent contracts', urgency: 'low' },
+            ].map((doc, index) => (
+              <div key={index} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+                <div className="flex items-center space-x-3">
+                  <FileText className="w-5 h-5 text-gray-600" />
+                  <div>
+                    <p className="text-sm font-medium">{doc.name}</p>
+                    <p className="text-xs text-gray-500">{doc.reason}</p>
+                  </div>
+                </div>
+                <Button size="sm" variant="outline">Generate</Button>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   )
 }

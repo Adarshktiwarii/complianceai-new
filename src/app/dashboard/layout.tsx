@@ -20,7 +20,11 @@ import {
   ChevronDown,
   Building,
   HelpCircle,
-  Sparkles
+  Sparkles,
+  Shield,
+  Cpu,
+  GitBranch,
+  Users
 } from 'lucide-react'
 
 export default function DashboardLayout({
@@ -64,7 +68,11 @@ export default function DashboardLayout({
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
     { name: 'Documents', href: '/dashboard/documents', icon: FileText },
     { name: 'Compliance', href: '/dashboard/compliance', icon: CheckSquare },
+    { name: 'Legal Health', href: '/dashboard/legal-health', icon: Shield, badge: 'New', badgeColor: 'bg-purple-100 text-purple-700' },
     { name: 'AI Assistant', href: '/dashboard/ai-assistant', icon: Bot },
+    { name: 'Smart Contracts', href: '/dashboard/smart-contracts', icon: Cpu, badge: 'Beta', badgeColor: 'bg-blue-100 text-blue-700' },
+    { name: 'Audit Trail', href: '/dashboard/audit-trail', icon: GitBranch },
+    { name: 'Team & Permissions', href: '/dashboard/team', icon: Users },
     { name: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
     { name: 'Settings', href: '/dashboard/settings', icon: Settings },
   ]
@@ -110,10 +118,10 @@ export default function DashboardLayout({
                 }`}
               >
                 <item.icon className="w-5 h-5" />
-                <span>{item.name}</span>
-                {item.name === 'AI Assistant' && (
-                  <span className="ml-auto bg-green-100 text-green-600 text-xs px-2 py-0.5 rounded-full">
-                    NEW
+                <span className="flex-1">{item.name}</span>
+                {item.badge && (
+                  <span className={`text-xs px-2 py-0.5 rounded-full ${item.badgeColor}`}>
+                    {item.badge}
                   </span>
                 )}
               </Link>
