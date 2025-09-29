@@ -40,6 +40,7 @@ import {
   MessageSquare
 } from 'lucide-react'
 import CountUp from 'react-countup'
+import { IntegrationLogos } from '@/components/integration-logos'
 
 export default function LandingPage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -604,7 +605,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Integration Partners Section - Modern Grid */}
+      {/* Integration Partners Section - With Real Logos */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
           <motion.div 
@@ -615,7 +616,7 @@ export default function LandingPage() {
           >
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Works where you work
-          </h2>
+            </h2>
             <p className="text-xl text-gray-600">
               Seamlessly integrates with your existing stack
             </p>
@@ -629,44 +630,44 @@ export default function LandingPage() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+              className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"
             >
               {[
                 { 
                   name: 'Zoho Books', 
                   description: 'Accounting',
-                  color: 'from-red-500 to-orange-500',
-                  icon: '📊'
+                  logo: IntegrationLogos.zoho,
+                  bgColor: 'bg-white'
                 },
                 { 
                   name: 'Tally', 
                   description: 'ERP',
-                  color: 'from-blue-500 to-cyan-500',
-                  icon: '📈'
+                  logo: IntegrationLogos.tally,
+                  bgColor: 'bg-white'
                 },
                 { 
                   name: 'Google Workspace', 
                   description: 'Productivity',
-                  color: 'from-green-500 to-emerald-500',
-                  icon: '🔷'
+                  logo: IntegrationLogos.google,
+                  bgColor: 'bg-white'
                 },
                 { 
                   name: 'Slack', 
                   description: 'Communication',
-                  color: 'from-purple-500 to-pink-500',
-                  icon: '💬'
+                  logo: IntegrationLogos.slack,
+                  bgColor: 'bg-white'
                 },
                 { 
                   name: 'WhatsApp', 
                   description: 'Messaging',
-                  color: 'from-green-500 to-green-600',
-                  icon: '📱'
+                  logo: IntegrationLogos.whatsapp,
+                  bgColor: 'bg-white'
                 },
                 { 
                   name: 'Razorpay', 
                   description: 'Payments',
-                  color: 'from-blue-600 to-indigo-600',
-                  icon: '💳'
+                  logo: IntegrationLogos.razorpay,
+                  bgColor: 'bg-white'
                 },
               ].map((integration, index) => (
                 <motion.div
@@ -678,13 +679,46 @@ export default function LandingPage() {
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
                   className="group"
                 >
-                  <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-purple-200 hover:shadow-xl transition-all cursor-pointer">
-                    <div className={`w-14 h-14 bg-gradient-to-br ${integration.color} rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                      <span className="text-2xl">{integration.icon}</span>
+                  <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-purple-200 hover:shadow-xl transition-all cursor-pointer h-full flex flex-col items-center justify-center">
+                    <div className={`w-full h-16 mb-3 flex items-center justify-center ${integration.bgColor} rounded-lg p-2`}>
+                      {integration.logo}
                     </div>
-                    <h3 className="font-semibold text-gray-900">{integration.name}</h3>
+                    <h3 className="font-semibold text-gray-900 text-center">{integration.name}</h3>
                     <p className="text-xs text-gray-500 mt-1">{integration.description}</p>
                   </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Additional integrations row */}
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="mt-6 grid grid-cols-3 md:grid-cols-6 gap-4 max-w-4xl mx-auto"
+            >
+              {[
+                { name: 'Paytm', logo: IntegrationLogos.paytm, color: 'text-blue-500' },
+                { name: 'HDFC Bank', logo: IntegrationLogos.hdfc, color: 'text-blue-800' },
+                { name: 'ICICI', logo: IntegrationLogos.icici, color: 'text-orange-600' },
+                { name: 'QuickBooks', logo: IntegrationLogos.quickbooks, color: 'text-green-600' },
+                { name: 'FreshBooks', logo: IntegrationLogos.freshbooks, color: 'text-blue-600' },
+                { name: 'Xero', logo: IntegrationLogos.xero, color: 'text-blue-500' },
+              ].map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 + index * 0.05 }}
+                  whileHover={{ y: -2 }}
+                  className="bg-gray-50 rounded-lg p-3 text-center hover:bg-gray-100 transition-colors cursor-pointer flex flex-col items-center justify-center"
+                >
+                  <div className="mb-2">
+                    {item.logo}
+                  </div>
+                  <span className={`text-sm font-semibold ${item.color}`}>{item.name}</span>
                 </motion.div>
               ))}
             </motion.div>
@@ -698,8 +732,8 @@ export default function LandingPage() {
             >
               <span className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 px-4 py-2 rounded-full text-sm">
                 <Zap className="w-4 h-4 text-purple-600" />
-                <span className="text-gray-700">+ 20 more integrations coming soon</span>
-            </span>
+                <span className="text-gray-700">Custom API integration available for Enterprise</span>
+              </span>
             </motion.div>
           </div>
         </div>
