@@ -35,7 +35,9 @@ import {
   Share2,
   Palette,
   Award,
-  TrendingUp
+  TrendingUp,
+  Building,
+  MessageSquare
 } from 'lucide-react'
 import CountUp from 'react-countup'
 
@@ -314,9 +316,9 @@ export default function LandingPage() {
                       <div className="bg-gray-100 rounded px-3 py-1 text-xs text-gray-600">
                         app.complianceai.com
                       </div>
-                    </div>
-                  </div>
-                  
+        </div>
+      </div>
+
                   {/* App Content Preview */}
                   <div className="bg-white rounded-b-lg border-x border-b border-gray-200 p-6">
                     <div className="space-y-4">
@@ -332,8 +334,8 @@ export default function LandingPage() {
                             </p>
                           </div>
                         </div>
-                      </div>
-                      
+      </div>
+
                       {/* Document Cards */}
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
                         <div className="p-4 bg-gradient-to-br from-blue-50 to-cyan-50 rounded-lg border border-blue-200">
@@ -493,147 +495,387 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
+      {/* Testimonials - Modern Cards with Gradient */}
+      <section id="testimonials" className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-white to-gray-50">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-              Loved by forward-thinking teams
-            </h2>
+              Trusted by
+              <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent"> 10,000+ </span>
+              businesses
+          </h2>
             <p className="text-xl text-gray-600">
-              Join thousands of businesses already saving time and money
+              See why companies love ComplianceAI
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {[
+              {
+                name: 'Priya Mehta',
+                role: 'Legal Head',
+                company: 'TechUnicorn',
+                content: 'Cut our legal expenses by 70%. The AI understands Indian law better than most junior lawyers. Absolutely game-changing for our startup.',
+                rating: 5,
+                image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Priya',
+                gradient: 'from-purple-400 via-pink-400 to-red-400'
+              },
+              {
+                name: 'Arjun Patel',
+                role: 'CFO',
+                company: 'ExportKing',
+                content: 'GST compliance used to be a nightmare. Now it\'s automated. We haven\'t missed a single deadline in 8 months. Worth every rupee.',
+                rating: 5,
+                image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Arjun',
+                gradient: 'from-blue-400 via-cyan-400 to-teal-400'
+              },
+              {
+                name: 'Sneha Reddy',
+                role: 'Founder',
+                company: 'FinFlow',
+                content: 'The document generation is incredibly fast and accurate. What impressed me most is how it adapts to recent law changes automatically.',
+                rating: 5,
+                image: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Sneha',
+                gradient: 'from-green-400 via-emerald-400 to-cyan-400'
+              }
+            ].map((testimonial, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-xl transition-shadow"
+                className="group relative"
               >
-                <div className="flex mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                  ))}
-                </div>
-                <p className="text-gray-700 mb-6 italic">"{testimonial.content}"</p>
-                <div className="flex items-center">
-                  <div className={`w-12 h-12 ${testimonial.color} rounded-full flex items-center justify-center text-white text-xl`}>
-                    {testimonial.avatar}
+                {/* Gradient background on hover */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${testimonial.gradient} rounded-2xl opacity-0 group-hover:opacity-10 transition-opacity blur-xl`} />
+                
+                <div className="relative bg-white rounded-2xl p-6 border border-gray-200 hover:shadow-2xl transition-all">
+                  {/* Rating Stars */}
+                  <div className="flex mb-4">
+                    {[...Array(testimonial.rating)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                    ))}
                   </div>
-                  <div className="ml-3">
-                    <p className="font-semibold text-gray-900">{testimonial.name}</p>
-                    <p className="text-sm text-gray-600">{testimonial.role}</p>
+                  
+                  {/* Quote */}
+                  <p className="text-gray-700 mb-6 italic leading-relaxed">
+                    "{testimonial.content}"
+                  </p>
+                  
+                  {/* Author */}
+                  <div className="flex items-center">
+                    <div className={`w-12 h-12 bg-gradient-to-br ${testimonial.gradient} rounded-full p-0.5`}>
+                      <img 
+                        src={testimonial.image} 
+                        alt={testimonial.name}
+                        className="w-full h-full rounded-full bg-white"
+                      />
+                    </div>
+                    <div className="ml-3">
+                      <p className="font-semibold text-gray-900">{testimonial.name}</p>
+                      <p className="text-sm text-gray-600">{testimonial.role} at {testimonial.company}</p>
+                    </div>
                   </div>
                 </div>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* Company Logos */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-16 text-center"
+          >
+            <p className="text-sm text-gray-500 mb-8">TRUSTED BY LEADING INDIAN COMPANIES</p>
+            <div className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6 opacity-60">
+              {['TCS', 'Wipro', 'Infosys', 'Flipkart', 'Zomato', 'BYJU\'S'].map((company, i) => (
+                <span key={i} className="text-2xl font-bold text-gray-400">{company}</span>
+              ))}
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Integration Partners Section - Modern Grid */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
+              Works where you work
+          </h2>
+            <p className="text-xl text-gray-600">
+              Seamlessly integrates with your existing stack
+            </p>
+          </motion.div>
+          
+          <div className="relative">
+            {/* Background decoration */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-100 via-pink-50 to-blue-100 rounded-3xl blur-3xl opacity-30" />
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="relative grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4"
+            >
+              {[
+                { 
+                  name: 'Zoho Books', 
+                  description: 'Accounting',
+                  color: 'from-red-500 to-orange-500',
+                  icon: '📊'
+                },
+                { 
+                  name: 'Tally', 
+                  description: 'ERP',
+                  color: 'from-blue-500 to-cyan-500',
+                  icon: '📈'
+                },
+                { 
+                  name: 'Google Workspace', 
+                  description: 'Productivity',
+                  color: 'from-green-500 to-emerald-500',
+                  icon: '🔷'
+                },
+                { 
+                  name: 'Slack', 
+                  description: 'Communication',
+                  color: 'from-purple-500 to-pink-500',
+                  icon: '💬'
+                },
+                { 
+                  name: 'WhatsApp', 
+                  description: 'Messaging',
+                  color: 'from-green-500 to-green-600',
+                  icon: '📱'
+                },
+                { 
+                  name: 'Razorpay', 
+                  description: 'Payments',
+                  color: 'from-blue-600 to-indigo-600',
+                  icon: '💳'
+                },
+              ].map((integration, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                  className="group"
+                >
+                  <div className="bg-white rounded-2xl p-6 border border-gray-100 hover:border-purple-200 hover:shadow-xl transition-all cursor-pointer">
+                    <div className={`w-14 h-14 bg-gradient-to-br ${integration.color} rounded-xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
+                      <span className="text-2xl">{integration.icon}</span>
+                    </div>
+                    <h3 className="font-semibold text-gray-900">{integration.name}</h3>
+                    <p className="text-xs text-gray-500 mt-1">{integration.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+
+            {/* Coming Soon Badge */}
+            <motion.div 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="mt-8 text-center"
+            >
+              <span className="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 px-4 py-2 rounded-full text-sm">
+                <Zap className="w-4 h-4 text-purple-600" />
+                <span className="text-gray-700">+ 20 more integrations coming soon</span>
+            </span>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* Animated Stats Section */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-black text-white">
+        <div className="max-w-7xl mx-auto">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-4">
+              Powering Legal Operations at Scale
+            </h2>
+          </motion.div>
+          
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              { 
+                value: 10000, 
+                suffix: '+', 
+                label: 'Active Companies', 
+                icon: Building,
+                decimals: 0 
+              },
+              { 
+                value: 1000000, 
+                suffix: '+', 
+                label: 'Documents Created', 
+                icon: FileText,
+                decimals: 0 
+              },
+              { 
+                value: 50, 
+                suffix: 'L+', 
+                label: 'Money Saved', 
+                prefix: '₹',
+                icon: TrendingUp,
+                decimals: 0 
+              },
+              { 
+                value: 99.9, 
+                suffix: '%', 
+                label: 'Uptime SLA', 
+                icon: TrendingUp,
+                decimals: 1 
+              },
+            ].map((stat, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="text-center"
+              >
+                <stat.icon className="w-8 h-8 mx-auto mb-4 text-purple-400" />
+                <div className="text-3xl md:text-5xl font-bold mb-2 bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  <CountUp
+                    end={stat.value}
+                    duration={2.5}
+                    separator=","
+                    prefix={stat.prefix || ''}
+                    suffix={stat.suffix || ''}
+                    decimals={stat.decimals}
+                    enableScrollSpy
+                    scrollSpyOnce
+                  />
+                </div>
+                <p className="text-gray-400">{stat.label}</p>
               </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Integration Partners Section */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8">
+      {/* Security & Compliance - Modern Design */}
+      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-gray-50 to-white">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-2xl mb-4">
+              <Shield className="w-8 h-8 text-white" />
+            </div>
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Integrates with your existing tools
+              Bank-Grade Security
             </h2>
-            <p className="text-xl text-gray-600">
-              Seamlessly connect with the tools you already use
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Your data is protected by multiple layers of security and compliance certifications
             </p>
-          </div>
+          </motion.div>
           
-          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             {[
-              { name: 'Zoho Books', logo: '📊' },
-              { name: 'Tally', logo: '📈' },
-              { name: 'Google Drive', logo: '☁️' },
-              { name: 'Slack', logo: '💬' },
-              { name: 'WhatsApp Business', logo: '📱' },
-              { name: 'Razorpay', logo: '💳' },
-            ].map((integration, index) => (
+              {
+                title: 'Data Encryption',
+                description: 'AES 256-bit encryption at rest and in transit',
+                features: ['End-to-end encryption', 'Secure key management', 'TLS 1.3 protocol'],
+                icon: Lock,
+                gradient: 'from-blue-500 to-cyan-500'
+              },
+              {
+                title: 'Compliance Standards',
+                description: 'Certified with global security standards',
+                features: ['ISO 27001:2013', 'SOC 2 Type II', 'GDPR Compliant'],
+                icon: Award,
+                gradient: 'from-purple-500 to-pink-500'
+              },
+              {
+                title: 'Infrastructure Security',
+                description: 'Enterprise-grade hosting and monitoring',
+                features: ['99.9% Uptime SLA', 'DDoS Protection', 'Daily Backups'],
+                icon: Shield,
+                gradient: 'from-green-500 to-emerald-500'
+              }
+            ].map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.05 }}
-                className="bg-white rounded-xl p-6 border border-gray-200 hover:shadow-lg transition-all text-center"
+                transition={{ delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
+                className="relative group"
               >
-                <div className="text-4xl mb-2">{integration.logo}</div>
-                <p className="text-sm font-medium text-gray-700">{integration.name}</p>
+                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl transform group-hover:scale-105 transition-transform" />
+                <div className="relative bg-white rounded-2xl p-6 border border-gray-200 hover:border-gray-300 transition-all">
+                  <div className={`w-12 h-12 bg-gradient-to-br ${item.gradient} rounded-xl flex items-center justify-center mb-4`}>
+                    <item.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">{item.title}</h3>
+                  <p className="text-sm text-gray-600 mb-4">{item.description}</p>
+                  <ul className="space-y-2">
+                    {item.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-center text-sm text-gray-700">
+                        <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </motion.div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Live Stats Counter */}
-      <section className="py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+          {/* Trust Badges */}
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="mt-12 flex flex-wrap justify-center items-center gap-8"
+          >
             {[
-              { value: 10000, suffix: '+', label: 'Active Businesses', prefix: '' },
-              { value: 1000000, suffix: '+', label: 'Documents Generated', prefix: '' },
-              { value: 50, suffix: 'L+', label: 'Money Saved', prefix: '₹' },
-              { value: 99.9, suffix: '%', label: 'Uptime SLA', prefix: '' },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-                  <CountUp
-                    end={stat.value}
-                    duration={2.5}
-                    separator=","
-                    prefix={stat.prefix}
-                    suffix={stat.suffix}
-                    enableScrollSpy
-                    scrollSpyOnce
-                  />
-                </div>
-                <p className="text-gray-600">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Security & Compliance Badges */}
-      <section className="py-16 px-4 sm:px-6 lg:px-8 border-t border-b bg-gray-50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-8">
-            <h3 className="text-2xl font-bold text-gray-900 mb-2">
-              Enterprise-Grade Security & Compliance
-            </h3>
-            <p className="text-gray-600">Your data is protected with industry-leading security standards</p>
-          </div>
-          
-          <div className="flex flex-wrap justify-center items-center gap-8">
-            {[
-              { name: 'ISO 27001', icon: Shield },
-              { name: 'GDPR Compliant', icon: Lock },
-              { name: 'SOC 2 Type II', icon: Award },
-              { name: '256-bit SSL', icon: Lock },
-              { name: 'VAPT Tested', icon: Shield },
+              { name: 'ISO 27001', verified: true },
+              { name: 'GDPR', verified: true },
+              { name: 'SOC 2', verified: true },
+              { name: 'VAPT', verified: true },
             ].map((badge, index) => (
               <motion.div
                 key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                className="flex flex-col items-center"
+                whileHover={{ scale: 1.05 }}
+                className="flex items-center space-x-2 bg-gray-50 px-4 py-2 rounded-lg border border-gray-200"
               >
-                <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-full flex items-center justify-center mb-2">
-                  <badge.icon className="w-8 h-8 text-gray-700" />
-                </div>
-                <span className="text-sm font-medium text-gray-700">{badge.name}</span>
+                <CheckCircle className="w-5 h-5 text-green-500" />
+                <span className="font-medium text-gray-700">{badge.name}</span>
+                {badge.verified && <span className="text-xs text-green-600">Verified</span>}
               </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
       </section>
 
@@ -643,7 +885,7 @@ export default function LandingPage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
               Built for every Indian business
-            </h2>
+          </h2>
             <p className="text-xl text-gray-600">
               From startups to enterprises, we've got you covered
             </p>
@@ -759,7 +1001,7 @@ export default function LandingPage() {
               <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
                 <span className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-1 rounded-full text-sm font-medium">
                   Most Popular
-                </span>
+            </span>
               </div>
               <div className="mb-8">
                 <h3 className="text-xl font-bold mb-2">Professional</h3>
@@ -845,7 +1087,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Final CTA */}
+      {/* CTA Section - Fixed Contact Sales */}
       <section className="py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl mx-auto">
           <motion.div
@@ -861,7 +1103,7 @@ export default function LandingPage() {
             <div className="relative z-10">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 Ready to transform your legal workflow?
-              </h2>
+          </h2>
               <p className="text-xl mb-8 text-white/90">
                 Join 10,000+ businesses already saving time with ComplianceAI
               </p>
@@ -872,9 +1114,12 @@ export default function LandingPage() {
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
-                <Button size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 rounded-xl px-8">
-                  Schedule Demo
-                </Button>
+                <Link href="/contact-sales">
+                  <Button size="lg" variant="outline" className="bg-transparent text-white border-white/30 hover:bg-white/10 rounded-xl px-8">
+                    <MessageSquare className="w-4 h-4 mr-2" />
+                    Contact Sales
+                  </Button>
+                </Link>
               </div>
               <p className="mt-6 text-sm text-white/70">
                 No credit card required • 14-day free trial • Cancel anytime
@@ -958,6 +1203,6 @@ export default function LandingPage() {
           </div>
         </div>
       </footer>
-    </div>
+      </div>
   )
 }
